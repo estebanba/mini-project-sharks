@@ -2,6 +2,9 @@ import pandas as pd
 
 # LOAD THE DATAFRAME
 def load_dataframe(url):
+    """
+    Loads the dataframe form a given Url.
+    """
     df = pd.read_excel(url)
     return df
 
@@ -17,23 +20,23 @@ def remove_null(df, column_list, value):
       print(f"Null values in column '{col}' have been replaced with value: {value}.")
     return df[col]
 
-# #Check for special characters in a column
-# def check_char(column_data):
-#   """
-#   Function to check for special characters using regen. Please name one column to check for special characters
-#   """
-#   result = column_data.str.contains(r'[^a-zA-Z\s]', regex=True, na=False).sum()
-#   table = column_data.str.contains(r'[^a-zA-Z\s]', regex=True, na=False)
-#   print(f"The number of values with special characters in this column is: {result}")
-#   return column_data[table].head(50)
 
 def clean_y_n(df, column):
+    """
+    Clean columns where desired output is either Y (Yes) or N (No).
+    Arguments are the Dataframe and the column to be cleaned.
+    """
     df[column] = df[column].str.strip().str.upper().str.replace(r'[^a-zA-Z]', '', regex=True)
     df[column] = df[column].apply(lambda x: "N/A" if x not in ["N", "Y"] else x)
     return df
 
 ## Used for shark species
 def clean_with_regex_dictionary(df, column, regex_map):
+    """
+    Uses a dictionary of regex keys with its formatted string values.
+    Arguments are the dataframe, the column to be cleaned, 
+    and a dictionary of pair regex-string to be mapped.
+    """
     df[column] = df[column].fillna("").apply(lambda x: x.lower())
     df[column] = df[column].str.lower().replace(regex_map, regex=True)
     return df
